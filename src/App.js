@@ -1,25 +1,74 @@
-import logo from './logo.svg';
 import './App.css';
+import { Card } from 'react-bootstrap';
+import { useState, useEffect } from "react";
 
-function App() {
+export default function App() {
+  const [menus, setMenus] = useState([]);
+
+  async function getMenu() {
+    const res = await fetch("https://forkify-api.herokuapp.com/api/v2/recipes?search=tikka");
+    const data = await res.json();
+    console.log(data.data.recipes);
+    setMenus(data.data.recipes);
+  }
+  useEffect(() => {
+    getMenu();
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <SubHeader />
+      <Menu menus={menus} />
+      <Footer />
     </div>
   );
 }
 
-export default App;
+function Header() {
+  return (
+    <h1 className='header'>FAST REACT PIZZA CO.</h1>
+  );
+}
+
+function SubHeader() {
+  return (
+    <div className='subHeader'>
+      <div className='underline'></div>
+      <h2 className='text'>Our Menu</h2>
+      <div className='underline'></div>
+    </div>
+  );
+}
+
+function Menu({ menus }) {
+  return (
+    <div className='ITEM' >
+      {menus.map((menu) => (
+        <CardComponent key={menu.id} image={menu.image_url} title={menu.title} />
+      ))}
+    </div>
+  );
+}
+
+function Footer() {
+    return(
+      <div className='footer'>
+        <p>We're open until 22:00. Come visit us or order onine.</p>
+        <button>Order Now</button>
+      </div>
+
+    )  
+}
+
+function CardComponent({ image, title }) {
+  return (
+    <Card style={{ width: '18rem' }}>
+      <Card.Img className='CARD-IMG' variant="top" src={image} />
+      <Card.Body>
+        <Card.Title>{title}</Card.Title>
+      </Card.Body>
+    </Card>
+  );
+}
+

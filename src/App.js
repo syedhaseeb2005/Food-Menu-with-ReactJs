@@ -1,24 +1,24 @@
 import './App.css';
-import { Card } from 'react-bootstrap';
+import { Card} from 'react-bootstrap';
 import { useState, useEffect } from "react";
 
 export default function App() {
   const [menus, setMenus] = useState([]);
+  const [search ,setsearch] = useState('')
 
+  useEffect(() => {
   async function getMenu() {
-    const res = await fetch("https://forkify-api.herokuapp.com/api/v2/recipes?search=tikka");
+    const res = await fetch(`https://forkify-api.herokuapp.com/api/v2/recipes?search=${search}`);
     const data = await res.json();
-    console.log(data.data.recipes);
+    // console.log(data.data.recipes);
     setMenus(data.data.recipes);
   }
-  useEffect(() => {
     getMenu();
-  }, []);
-
+  }, [search]);
   return (
-    <div className="App">
+      <div className="App">
       <Header />
-      <SubHeader />
+      <SubHeader setsearch={setsearch} />
       <Menu menus={menus} />
       <Footer />
     </div>
@@ -31,12 +31,17 @@ function Header() {
   );
 }
 
-function SubHeader() {
+function SubHeader({setsearch}) {
   return (
     <div className='subHeader'>
       <div className='underline'></div>
       <h2 className='text'>Our Menu</h2>
       <div className='underline'></div>
+      <input className='search-input'
+      type='text' 
+      placeholder='Search Item...'
+      onChange={(e)=>setsearch(e.target.value)}
+      />
     </div>
   );
 }
@@ -56,6 +61,7 @@ function Footer() {
       <div className='footer'>
         <p>We're open until 22:00. Come visit us or order onine.</p>
         <button>Order Now</button>
+   
       </div>
 
     )  

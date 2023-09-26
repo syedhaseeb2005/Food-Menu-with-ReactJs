@@ -1,6 +1,6 @@
 # Getting Started with Create React App
 
-This project was bootstrapped with (https://food-menu-reactjs.netlify.app/).
+This project was bootstrapped with (https://food-menu-with-reactjs.vercel.app/).
 
 ## Available Scripts
 
